@@ -1,0 +1,19 @@
+text,label
+"Bom dia, poderiam me informar o status do pedido #12345?",status
+"Olá, estou com erro 403 ao acessar o sistema de notas.",suporte
+"Favor abrir um chamado para atualização cadastral do colaborador João Silva.",cadastro
+"Boa tarde, segue em anexo o documento solicitado.",anexo
+"A solicitação foi aprovada pelo gestor.",aprovacao
+"Obrigado pelo retorno!",saudacao
+"Não consigo fazer login no portal mesmo resetando a senha.",suporte
+"Qual o prazo para conclusão do protocolo 2024-9988?",status
+"Preciso abrir chamado para liberar acesso do funcionário Maria Clara.",abrir_chamado
+"Feliz ano novo a todos!",saudacao
+"Prezados, segue em anexo os documentos solicitados para continuidade do processo.",anexo
+"Poderiam confirmar se o ticket 9876 foi aprovado?",aprovacao
+"Preciso atualizar o cadastro da colaboradora Maria dos Santos, alterando o endereço e telefone.",cadastro
+"Bom dia, tudo bem? Quero saber o status do pedido 12345, conseguem me informar o prazo?",status
+"Estou com um problema no acesso, a tela fica em branco após o login.",suporte
+"Olhem este meme engraçado que recebi hoje",saudacao
+"Gente, vejam essa piada do dia, muito boa!",saudacao
+"Segue um gif divertido do time",saudacao

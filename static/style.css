@@ -1,0 +1,125 @@
+body {
+    font-family: 'Segoe UI', Arial, sans-serif;
+    background: linear-gradient(120deg, #e0eafc, #cfdef3);
+    margin: 0;
+    padding: 0;
+}
+
+.container {
+    max-width: 600px;
+    margin: 40px auto;
+    background: #fff;
+    border-radius: 12px;
+    box-shadow: 0 4px 24px rgba(0,0,0,0.08);
+    padding: 32px 24px;
+}
+
+h1 {
+    color: #2a4d69;
+    text-align: center;
+    margin-bottom: 24px;
+}
+
+label {
+    font-weight: 500;
+    color: #2a4d69;
+}
+
+input[type="file"], textarea {
+    width: 100%;
+    margin-top: 8px;
+    margin-bottom: 16px;
+    padding: 8px;
+    border-radius: 6px;
+    border: 1px solid #bfc9d4;
+    font-size: 1rem;
+}
+
+/* Evita que o textarea ultrapasse o container ao redimensionar */
+textarea {
+    box-sizing: border-box;
+    max-width: 100%;
+    resize: vertical; /* permite apenas redimensionar na vertical */
+    min-height: 200px;
+    overflow: auto;
+}
+
+.uploader #drop-zone {
+    margin-top: 10px;
+    padding: 14px;
+    border: 2px dashed #bfc9d4;
+    border-radius: 8px;
+    text-align: center;
+    color: #2a4d69;
+    background: #f9fbff;
+}
+.uploader #drop-zone.hover {
+    background: #eef4ff;
+    border-color: #93b4ff;
+}
+
+/* opções por requisição removidas do UI */
+
+button {
+    background: #2a4d69;
+    color: #fff;
+    border: none;
+    border-radius: 6px;
+    padding: 12px 24px;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: background 0.2s;
+}
+
+button:hover {
+    background: #1e3552;
+}
+
+#result {
+    margin-top: 32px;
+    background: #f6f8fa;
+    border-radius: 8px;
+    padding: 20px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+}
+
+#categoria {
+    font-size: 1.1rem;
+    color: #1e3552;
+    font-weight: bold;
+}
+
+#resposta {
+    background: #e0eafc;
+    border-radius: 6px;
+    padding: 12px;
+    margin-top: 8px;
+    color: #2a4d69;
+}
+
+.resposta-card {
+    white-space: pre-wrap;
+}
+
+.actions {
+    display: flex;
+    gap: 8px;
+    margin-top: 10px;
+}
+
+.loading {
+    display: inline-block;
+    margin-left: 12px;
+    color: #2a4d69;
+}
+
+.tag {
+    display: inline-block;
+    margin-left: 8px;
+    padding: 2px 6px;
+    background: #eef2ff;
+    color: #3730a3;
+    border: 1px solid #c7d2fe;
+    border-radius: 999px;
+    font-size: 12px;
+}

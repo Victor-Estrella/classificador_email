@@ -1,0 +1,19 @@
+# Render.com blueprint for Flask app
+services:
+  - type: web
+    name: autou-email-classifier
+    env: python
+    plan: free
+    buildCommand: pip install -r requirements.txt
+    startCommand: gunicorn app:app --timeout 120 --workers 2
+    envVars:
+      - key: PYTHON_VERSION
+        value: 3.12.5
+      - key: AI_PROVIDER
+        value: hf
+      - key: HF_API_TOKEN
+        sync: false
+      - key: FORCE_AI_REPLY
+        value: "0"
+      - key: MIN_AI_REPLY_CHARS
+        value: "40"

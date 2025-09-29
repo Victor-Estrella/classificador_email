@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Classificador de Emails - AutoU</title>
+    <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+    <div class="container">
+        <h1>Classificador de Emails</h1>
+        <form id="upload-form" method="post" enctype="multipart/form-data">
+            <div class="uploader">
+                <label for="email-file">Upload de arquivo (.txt ou .pdf):</label>
+                <input type="file" id="email-file" name="email_file" accept=".txt,.pdf">
+                <div id="drop-zone">Arraste e solte o arquivo aqui</div>
+            </div>
+            <label for="email-text">Ou insira o texto do email:</label>
+            <textarea id="email-text" name="email_text" rows="8" cols="60" placeholder="Cole o texto do email aqui..."></textarea>
+            <button type="submit" id="submit-btn">Classificar Email</button>
+            <div id="loading" class="loading" style="display:none;">Processando…</div>
+        </form>
+        <div id="result" style="display:none;">
+            <h2>Resultado</h2>
+            <p><strong>Categoria:</strong> <span id="categoria"></span> <small id="categoria-origem" class="tag"></small></p>
+            <p><strong>Resposta Sugerida:</strong> <small id="resposta-origem" class="tag"></small></p>
+            <div id="resposta" class="resposta-card"></div>
+            <div class="actions">
+                <button type="button" id="copy-btn">Copiar</button>
+                <button type="button" id="download-btn">Baixar .txt</button>
+            </div>
+        </div>
+    </div>
+    <script src="/static/script.js"></script>
+</body>
+</html>

@@ -1,0 +1,20 @@
+# Python
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+*.sqlite3
+
+# Environments
+.venv/
+venv/
+env/
+.python-version
+
+# App data
+uploads/
+.env
+
+# OS
+.DS_Store
+Thumbs.db

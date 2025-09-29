@@ -1,0 +1,10 @@
+flask
+nltk
+PyPDF2
+requests
+python-dotenv
+flask-cors
+sentence-transformers
+transformers
+torch
+huggingface_hub
