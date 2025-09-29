@@ -4,7 +4,6 @@ import re
 from werkzeug.utils import secure_filename
 import requests
 from flask_cors import CORS
-import pickle
 from typing import Optional
 
 import nltk
@@ -87,41 +86,21 @@ if HF_API_TOKEN:
     except Exception as _:
         hf_chat_client = None
 
-# Local Transformers (opcional)
-USE_LOCAL_CLASSIFIER = _env_flag('USE_LOCAL_CLASSIFIER', '0')
-USE_LOCAL_GENERATOR = _env_flag('USE_LOCAL_GENERATOR', '0')
-LOCAL_CLS_MODEL = os.getenv('LOCAL_CLS_MODEL', 'distilbert-base-uncased-finetuned-sst-2-english')
-LOCAL_T2T_MODEL = os.getenv('LOCAL_T2T_MODEL', 'google/flan-t5-small')
-
-_local_cls = {'tokenizer': None, 'model': None}
-_local_t2t = {'tokenizer': None, 'model': None}
+# Local Transformers removidos no modo minimalista
 
 stop_words = set(stopwords.words('portuguese'))
 stemmer = SnowballStemmer('portuguese')
 
-# Modelo de intenção (opcional)
-INTENT_MODEL_PATH = os.path.join('models', 'intent_nb.pkl')
-intent_clf = None
-try:
-    if os.path.exists(INTENT_MODEL_PATH):
-        with open(INTENT_MODEL_PATH, 'rb') as f:
-            intent_clf = pickle.load(f)
-except Exception as e:
-    print('Falha ao carregar modelo de intenção:', e)
+# Classificador de intenção removido neste perfil enxuto
 
 def allowed_file(filename):
     return '.' in filename and filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
 
-def preprocess_text(text):
-    text = re.sub(r'[^\w\s]', ' ', text)
-    words = text.lower().split()
-    words = [stemmer.stem(w) for w in words if w not in stop_words]
-    return ' '.join(words)
+# preprocess_text não utilizado — removido
 
 def text_to_features(text: str):
-    toks = re.findall(r"[\wÀ-ÿ]+", text.lower())
-    toks = [stemmer.stem(t) for t in toks if t not in stop_words]
-    return {f'has({t})': True for t in toks}
+    # Mantido vazio por compatibilidade — intenção não usada
+    return {}
 
 def read_text_file_best_effort(filepath: str) -> str:
     """Tenta ler arquivo texto tentando UTF-8, CP1252 e fallback ignorando erros."""
@@ -188,38 +167,11 @@ def classify_with_hf_api(text: str) -> Optional[str]:
             time.sleep(1)
     return None
 
-def _load_local_classifier() -> bool:
-    if _local_cls['model'] is not None and _local_cls['tokenizer'] is not None:
-        return True
-    try:
-        from transformers import AutoTokenizer, AutoModelForSequenceClassification
-        tok = AutoTokenizer.from_pretrained(LOCAL_CLS_MODEL)
-        mdl = AutoModelForSequenceClassification.from_pretrained(LOCAL_CLS_MODEL)
-        _local_cls['tokenizer'] = tok
-        _local_cls['model'] = mdl
-        print('Local classifier loaded:', LOCAL_CLS_MODEL)
-        return True
-    except Exception as e:
-        print('Failed to load local classifier:', e)
-        return False
+# _load_local_classifier removido (não usamos modelos locais)
 
 def classify_with_local_model(text: str) -> Optional[str]:
-    if not USE_LOCAL_CLASSIFIER:
-        return None
-    if not _load_local_classifier():
-        return None
-    try:
-        import torch
-        tok = _local_cls['tokenizer']
-        mdl = _local_cls['model']
-        inputs = tok(text, return_tensors='pt')
-        with torch.no_grad():
-            outputs = mdl(**inputs)
-        pred = int(outputs.logits.argmax(dim=1).item())
-        return 'Produtivo' if pred == 1 else 'Improdutivo'
-    except Exception as e:
-        print('Local classify error:', e)
-        return None
+    # Caminho local removido
+    return None
 
 # (OpenAI removido)
 
@@ -376,44 +328,9 @@ def generate_reply_with_hf_chat(email_text: str, categoria: str) -> Optional[str
         print('HF chat error:', e)
         return None
 
-def _load_local_generator() -> bool:
-    if _local_t2t['model'] is not None and _local_t2t['tokenizer'] is not None:
-        return True
-    try:
-        from transformers import AutoTokenizer, AutoModelForSeq2SeqLM
-        tok = AutoTokenizer.from_pretrained(LOCAL_T2T_MODEL)
-        mdl = AutoModelForSeq2SeqLM.from_pretrained(LOCAL_T2T_MODEL)
-        _local_t2t['tokenizer'] = tok
-        _local_t2t['model'] = mdl
-        print('Local generator loaded:', LOCAL_T2T_MODEL)
-        return True
-    except Exception as e:
-        print('Failed to load local generator:', e)
-        return False
-
 def generate_reply_with_local_model(email_text: str, categoria: str) -> Optional[str]:
-    if not USE_LOCAL_GENERATOR:
-        return None
-    if not _load_local_generator():
-        return None
-    try:
-        import torch
-        tok = _local_t2t['tokenizer']
-        mdl = _local_t2t['model']
-        instrucao = (
-            "Escreva uma resposta educada e objetiva em português. "
-            f"Categoria: {categoria}. "
-            "Se produtivo, confirme recebimento, peça dados faltantes (se necessário) e informe próximos passos. "
-            "Se improdutivo, agradeça de forma cordial.\n\nEmail:\n"
-        )
-        prompt = instrucao + email_text
-        inputs = tok(prompt, return_tensors='pt')
-        with torch.no_grad():
-            output_ids = mdl.generate(**inputs, max_new_tokens=160)
-        return tok.decode(output_ids[0], skip_special_tokens=True)
-    except Exception as e:
-        print('Local generate error:', e)
-        return None
+    # Caminho local removido
+    return None
 
 def _flatten_embedding(resp):
     # Alguns modelos retornam [tokens][dim], outros [dim]
@@ -762,38 +679,19 @@ def process_email():
             return jsonify({'error': 'Nenhum texto fornecido.'}), 400
 
         # Classificação com IA Hugging Face (fallback para heurística)
-        # Tenta classificador local (se habilitado), senão Hugging Face
-        api_cat = classify_with_local_model(email_text) if USE_LOCAL_CLASSIFIER else None
-        if not api_cat:
-            api_cat = classify_with_hf_api(email_text)
+        api_cat = classify_with_hf_api(email_text)
         heur_cat, has_prod, has_improd = heuristic_category_and_flags(email_text)
         categoria = api_cat or heur_cat
-        categoria_origem = ('local' if USE_LOCAL_CLASSIFIER and api_cat else ('hf' if api_cat else 'heuristica'))
+        categoria_origem = ('hf' if api_cat else 'heuristica')
         if api_cat and api_cat != heur_cat and has_improd and not has_prod:
             categoria = 'Improdutivo'
-
-        # Intenção via modelo local (se disponível) para orientar a resposta
-        predicted_intent = None
-        if intent_clf is not None:
-            try:
-                feats = text_to_features(email_text)
-                predicted_intent = intent_clf.classify(feats)
-            except Exception as e:
-                print('Falha ao classificar intenção local:', e)
 
         # Resposta personalizada por padrão
         resposta = generate_personalized_reply(email_text, categoria)
         resposta_origem = 'template'
-        # Pequena personalização extra baseada em intenção prevista
-        if predicted_intent == 'status' and 'status' not in resposta.lower():
-            resposta += ' Observação: vamos priorizar a verificação de status e retornaremos em seguida.'
-        elif predicted_intent == 'suporte' and 'suporte' not in resposta.lower():
-            resposta += ' Nosso time de suporte irá analisar os detalhes e responder o quanto antes.'
 
-        # Geração de resposta via IA (ordem: chat > local t2t > HF t2t)
+        # Geração de resposta via IA (ordem: chat > HF t2t)
         ai_resp = generate_reply_with_hf_chat(email_text, categoria)
-        if not ai_resp:
-            ai_resp = generate_reply_with_local_model(email_text, categoria) if USE_LOCAL_GENERATOR else None
         if not ai_resp:
             ai_resp = generate_reply_with_hf_api(email_text, categoria)
         # Pós-processamento para limpar raciocínio e tags
@@ -802,12 +700,7 @@ def process_email():
         if ai_resp and (force_ai or len(ai_resp.strip()) >= min_ai_chars):
             resposta = ai_resp
             # marca origem mais específica
-            if ai_resp and hf_chat_client is not None and resposta != '':
-                resposta_origem = 'ai'
-            elif USE_LOCAL_GENERATOR and _local_t2t['model'] is not None:
-                resposta_origem = 'ai-local'
-            else:
-                resposta_origem = 'ai'
+            resposta_origem = 'ai'
         else:
             # Fallback: usar embeddings para escolher o melhor template (com Jaccard local se HF indisponível)
             emb_choice = choose_reply_by_embeddings(email_text, categoria)

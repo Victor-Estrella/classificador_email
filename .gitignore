@@ -7,7 +7,11 @@ __pycache__/
 
 # Environments
 .venv/
-venv/
+uploads/*
+!uploads/.gitkeep
+data/
+models/
+notebooks/
 env/
 .python-version
 
