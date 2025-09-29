@@ -44,19 +44,7 @@ textarea {
     overflow: auto;
 }
 
-.uploader #drop-zone {
-    margin-top: 10px;
-    padding: 14px;
-    border: 2px dashed #bfc9d4;
-    border-radius: 8px;
-    text-align: center;
-    color: #2a4d69;
-    background: #f9fbff;
-}
-.uploader #drop-zone.hover {
-    background: #eef4ff;
-    border-color: #93b4ff;
-}
+/* drop-zone removido */
 
 /* opções por requisição removidas do UI */
 
@@ -113,13 +101,4 @@ button:hover {
     color: #2a4d69;
 }
 
-.tag {
-    display: inline-block;
-    margin-left: 8px;
-    padding: 2px 6px;
-    background: #eef2ff;
-    color: #3730a3;
-    border: 1px solid #c7d2fe;
-    border-radius: 999px;
-    font-size: 12px;
-}
+/* tags de origem removidas */

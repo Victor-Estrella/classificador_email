@@ -1,7 +1,7 @@
 # AutoU Email Classifier
 
 Aplicação web que classifica emails em "Produtivo" ou "Improdutivo" e sugere respostas automáticas.
-Quando configurado, usa Hugging Face (zero-shot para classificação e geração via text2text/chat). Sem token, recorre a heurísticas robustas e respostas personalizadas por template, com fallback de seleção via embeddings quando possível.
+Usa Hugging Face (zero-shot para classificação e geração via text2text/chat) quando o token está presente. Sem token, recorre a heurísticas robustas e respostas personalizadas por template, com fallback de seleção por similaridade.
 
 ## Como executar localmente (Windows)
 
@@ -38,9 +38,9 @@ python .\app.py
 - Entrada por texto direto ou upload de `.txt` e `.pdf` (extração via PyPDF2), com drag-and-drop
 - Classificação do email (IA Hugging Face quando configurado; fallback heurístico caso contrário)
 - Sugestão de resposta automática personalizada, com:
-   - Preferência por IA (chat/text2text ou local opcional)
-   - Fallback por embeddings (Hugging Face sentence-similarity/feature-extraction) ou similaridade local (Jaccard)
-- UI com carregamento, tags de origem (HF/heurística/local/embeddings), copiar e baixar resposta
+   - Preferência por IA (chat/text2text)
+   - Fallback por embeddings/similaridade local quando necessário
+- UI com carregamento, tags de origem (HF/heurística/embeddings), copiar e baixar resposta
 
 ## Variáveis de ambiente suportadas
 
@@ -51,9 +51,7 @@ python .\app.py
 - HF_EMBED_MODEL: modelo de embeddings/similarity
 - FORCE_AI_REPLY: "1" para preferir a resposta gerada pela IA quando houver
 - MIN_AI_REPLY_CHARS: mínimo de caracteres para aceitar resposta da IA
-- USE_LOCAL_CLASSIFIER / USE_LOCAL_GENERATOR: habilitam modelos locais opcionais (transformers/torch)
 
-Obs.: OpenAI e Ollama não são utilizados. Modelos locais (transformers/torch) são opcionais.
 
 ## Estrutura do projeto
 
@@ -63,8 +61,6 @@ Obs.: OpenAI e Ollama não são utilizados. Modelos locais (transformers/torch) 
 - `static/script.js`: Integração frontend-backend
 - `requirements.txt`: Dependências Python
 - `render.yaml` e `Procfile`: Configurações para deploy
-- `data/training/emails.csv`: Dataset de exemplos rotulados (intenção)
-- `train_intent_nltk.py`: Script de treinamento local (NLTK) que gera `models/intent_nb.pkl`
 
 ## Deploy na nuvem (Render.com)
 
@@ -81,22 +77,5 @@ Obs.: OpenAI e Ollama não são utilizados. Modelos locais (transformers/torch) 
 
 Alternativas: Railway, Fly.io, Azure Web Apps.
 
-## Demonstração de treinamento (Intenção)
-
-Incluímos um classificador leve de intenções (status, suporte, cadastro, etc.) usando NLTK. Se o arquivo `models/intent_nb.pkl` existir, o backend o carrega e usa para refinar a resposta.
-
-1) Edite/expanda `data/training/emails.csv` com seus exemplos rotulados.
-2) Treine o modelo:
-
-```powershell
-python .\train_intent_nltk.py
-```
-
-3) O modelo será salvo em `models/intent_nb.pkl` e usado automaticamente pelo `app.py`.
-
-## Notas
-
-- Projeto pensado para ser leve (sem `transformers/torch`).
-- IA Hugging Face é opcional; sem token, o app usa heurísticas robustas e respostas padrão personalizadas.
-- Endpoints: `/` (UI), `/process` (POST), `/health` (GET).
-- Aceitamos contribuições via pull request.
+## Autor
+Victor Henrique Estrella Carracci

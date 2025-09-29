@@ -1,11 +1,11 @@
 document.addEventListener('DOMContentLoaded', function() {
     const form = document.getElementById('upload-form');
-    const dropZone = document.getElementById('drop-zone');
+    // drag-and-drop removido
     const resultDiv = document.getElementById('result');
     const categoriaSpan = document.getElementById('categoria');
-    const categoriaOrigem = document.getElementById('categoria-origem');
+    // origem removida do UI
     const respostaDiv = document.getElementById('resposta');
-    const respostaOrigem = document.getElementById('resposta-origem');
+    // origem removida do UI
     const loading = document.getElementById('loading');
     const submitBtn = document.getElementById('submit-btn');
     const copyBtn = document.getElementById('copy-btn');
@@ -15,21 +15,7 @@ document.addEventListener('DOMContentLoaded', function() {
     // Se a página estiver sendo servida via Live Server (porta 5500), direcione as requisições para o backend Flask (porta 5000)
     const API_BASE = (location.port === '5000') ? '' : 'http://localhost:5000';
 
-    // Drag and drop
-    if (dropZone) {
-        ['dragenter','dragover'].forEach(evt => {
-            dropZone.addEventListener(evt, (e) => { e.preventDefault(); dropZone.classList.add('hover'); });
-        });
-        ;['dragleave','drop'].forEach(evt => {
-            dropZone.addEventListener(evt, (e) => { e.preventDefault(); dropZone.classList.remove('hover'); });
-        });
-        dropZone.addEventListener('drop', (e) => {
-            const files = e.dataTransfer.files;
-            if (files && files.length) {
-                fileInput.files = files;
-            }
-        });
-    }
+    // drag-and-drop removido
 
     form.addEventListener('submit', function(e) {
         e.preventDefault();
@@ -48,13 +34,7 @@ document.addEventListener('DOMContentLoaded', function() {
             } else {
                 categoriaSpan.textContent = data.categoria;
                 respostaDiv.textContent = data.resposta;
-                // Etiquetas de origem
-                categoriaOrigem.textContent = data.categoria_origem === 'hf' ? '(via IA/HF)' : (data.categoria_origem === 'local' ? '(via IA local)' : '(via heurística)');
-                respostaOrigem.textContent =
-                    data.resposta_origem === 'ai' ? 'Resposta gerada por IA (HF)' :
-                    data.resposta_origem === 'ai-local' ? 'Resposta gerada por IA (local)' :
-                    data.resposta_origem === 'ai-embed' ? 'Resposta escolhida por IA (embeddings)' :
-                    'Resposta por template';
+                // etiquetas de origem removidas
                 resultDiv.style.display = 'block';
             }
         })

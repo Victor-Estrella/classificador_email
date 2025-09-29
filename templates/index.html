@@ -13,7 +13,6 @@
             <div class="uploader">
                 <label for="email-file">Upload de arquivo (.txt ou .pdf):</label>
                 <input type="file" id="email-file" name="email_file" accept=".txt,.pdf">
-                <div id="drop-zone">Arraste e solte o arquivo aqui</div>
             </div>
             <label for="email-text">Ou insira o texto do email:</label>
             <textarea id="email-text" name="email_text" rows="8" cols="60" placeholder="Cole o texto do email aqui..."></textarea>
@@ -22,8 +21,8 @@
         </form>
         <div id="result" style="display:none;">
             <h2>Resultado</h2>
-            <p><strong>Categoria:</strong> <span id="categoria"></span> <small id="categoria-origem" class="tag"></small></p>
-            <p><strong>Resposta Sugerida:</strong> <small id="resposta-origem" class="tag"></small></p>
+            <p><strong>Categoria:</strong> <span id="categoria"></span></p>
+            <p><strong>Resposta Sugerida:</strong></p>
             <div id="resposta" class="resposta-card"></div>
             <div class="actions">
                 <button type="button" id="copy-btn">Copiar</button>
