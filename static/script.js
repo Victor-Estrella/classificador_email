@@ -12,8 +12,10 @@ document.addEventListener('DOMContentLoaded', function() {
     const downloadBtn = document.getElementById('download-btn');
     const fileInput = document.getElementById('email-file');
     const textInput = document.getElementById('email-text');
-    // Se a página estiver sendo servida via Live Server (porta 5500), direcione as requisições para o backend Flask (porta 5000)
-    const API_BASE = (location.port === '5000') ? '' : 'http://localhost:5000';
+    // Base da API: em produção (Render), usar same-origin ('').
+    // Em desenvolvimento local, se a página NÃO estiver na porta 5000 (ex.: Live Server 5500), aponte para http://localhost:5000
+    const isLocalHost = ['localhost', '127.0.0.1'].includes(location.hostname);
+    const API_BASE = (isLocalHost && location.port && location.port !== '5000') ? 'http://localhost:5000' : '';
 
     // drag-and-drop removido
 
