@@ -1,4 +1,3 @@
-# Render.com blueprint for Flask app
 services:
   - type: web
     name: autou-email-classifier
@@ -14,6 +13,6 @@ services:
       - key: HF_API_TOKEN
         sync: false
       - key: FORCE_AI_REPLY
-        value: "0"
+        value: "1"
       - key: MIN_AI_REPLY_CHARS
-        value: "40"
+        value: "20"
